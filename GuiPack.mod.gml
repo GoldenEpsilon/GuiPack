@@ -535,7 +535,7 @@ global.tooltips = [];
 	draw_rectangle(_x+1, _y+1+(_h-barH)*(_scrollPos/max(_scrollMax - _uih, 1)), _x+_w, _y+1+(_h-barH)*(_scrollPos/max(_scrollMax - _uih, 1))+barH, 0);
 	if(gp_button_check(_uix+1, _uiy+1, _w, _h)){
 		holdScroll = gp_button_index(_uix+1, _uiy+7, _w, _h-6);
-		if(global.inputHolds[holdScroll] == 0){
+		if(holdScroll != -1 && global.inputHolds[holdScroll] == 0){
 			global.inputHolds[holdScroll] = 1;
 			_scrollPos = max(min((mouse_y[holdScroll] - barH/2 - _uiy - view_yview[0])/(_h-barH), 1), 0) * max(_scrollMax - _uih, 0);
 		}else{
