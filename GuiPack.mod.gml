@@ -345,11 +345,12 @@ global.tooltips = [];
 
 #define draw_gp_surface(_x,_y,_w,_h,_uix,_uiy, _gpscroll, _gpmarkup, _scrollbar, _basesurf)
 {
-	var surf = surface_create(_w, _h);
+	surface_reset_target();
+	var _surf = surface_create(_w, _h);
 	if(_scrollbar){
 		_w -= 9;
 	}
-	surface_set_target(surf);
+	surface_set_target(_surf);
 	draw_clear_alpha(c_black, 0);
 	draw_set_colour(c_white);
 	var yoff = -_gpscroll;
@@ -463,7 +464,7 @@ global.tooltips = [];
 					break;
 				case "ticker":
 					var s = gp_ticker(-view_xview[0],-view_yview[0],(o.width <= 0 ? _w-o.lborder-o.rborder + o.width : o.width),o.height <= 0 ? o.fontHeight : o.height,o.text,o.speed,o.offset,o.color,o.font,o.fontWidth,o.fontHeight,o.bgColor);
-					surface_set_target(surf);
+					surface_set_target(_surf);
 					draw_surface(s, ox, oy+1);
 					o.xsize = o.width <= 0 ? _w + o.width : o.width;
 					o.ysize = o.height <= 0 ? o.fontHeight : o.height;
@@ -477,13 +478,14 @@ global.tooltips = [];
 						}
 						if(o.hover){array_push(global.tooltips, {hover : o.hover, hoverText : o.hoverText, hoverTextColor : "hoverTextColor" in o ? o.hoverTextColor : c_purple});}
 					}
+					surface_reset_target();
 					break;
 				case "surface":
 					if("scroll" not in o){o.scroll = 0;}
 					if("scrollbar" not in o){o.scrollbar = 0;}
 					o.xsize = o.width <= 0 ? _w + o.width : o.width;
 					o.ysize = o.height <= 0 ? _h + o.height : o.height;
-					o.gpscroll = draw_gp_surface(ox,oy,o.xsize,o.ysize,_uix,_uiy,o.scroll,o.markup,o.scrollbar, surf);
+					o.gpscroll = draw_gp_surface(ox,oy,o.xsize,o.ysize,_uix,_uiy,o.scroll,o.markup,o.scrollbar, _surf);
 					if("hoverText" in o){
 						o.hover = false;
 						for(var i2 = 0; i2 < maxp; i2++){
@@ -507,8 +509,8 @@ global.tooltips = [];
 	if(_basesurf != null){
 		surface_set_target(_basesurf);
 	}
-	draw_surface(surf, _x, _y);
-	surface_free(surf);
+	draw_surface(_surf, _x, _y);
+	surface_free(_surf);
 	return retVal;
 }
 #define draw_gp_surface_scrollbar(_x,_y,_w,_h,_uix,_uiy,_scrollPos,_scrollMax)
